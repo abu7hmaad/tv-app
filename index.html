@@ -57,191 +57,21 @@ header h2 { font-size: 16px; font-weight: 900; white-space: nowrap; overflow: hi
 #sbar { display: flex; gap: 8px; padding: 8px 12px; border-bottom: 1px solid var(--line); background: var(--panel); }
 #q { flex: 1; min-width: 0; background: var(--ink); border: 1px solid var(--line); border-radius: 12px; padding: 9px 14px; font-size: 15px; }
 #q:focus { border-color: var(--gold); outline: none; }
-#catbar { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-bottom: 1px solid var(--line); background: var(--panel); }
-#back { padding: 7px 14px; border-radius: 10px; background: var(--gold); color: #1a1204; font-weight: 900; font-size: 14px; flex: none; }
-#catTitle { font-size: 15px; font-weight: 900; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; min-width: 0; }
-#catCount { color: var(--mute); font-size: 12px; flex: none; }
-#wrap { overflow-y: auto; padding: 14px 16px 40px; scroll-padding-top: var(--ph,0px); min-height: 0; }
-#rbar { max-width: 1000px; margin: 0 auto; }
-.rsel { position: relative; max-width: 1000px; margin: 0 auto; }
-.rsel .sb { width: 100%; display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 16px; background: linear-gradient(160deg,var(--raise),var(--panel)); border: 1px solid var(--line); font-weight: 800; font-size: 15px; text-align: right; }
-.rsel .sb i { font-style: normal; width: 34px; height: 34px; border-radius: 11px; background: var(--gold); color: #1a1204; display: grid; place-items: center; font-weight: 900; flex: none; }
-.rsel .sb .nm { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.rsel .sb .nm em { font-style: normal; display: block; font-size: 11px; color: var(--mute); font-weight: 600; }
-.rsel .sb .ar { transition: transform .2s; color: var(--mute); }
-.rsel.open .sb { border-color: var(--gold); }
-.rsel.open .sb .ar { transform: rotate(180deg); }
-.rsel .dd { position: absolute; top: calc(100% + 6px); left: 0; right: 0; z-index: 40; background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 6px; box-shadow: 0 20px 50px -12px #000; max-height: 60vh; overflow-y: auto; display: none; }
-.rsel.open .dd { display: block; }
-.rsel .op { width: 100%; display: flex; align-items: center; gap: 10px; padding: 11px 12px; border-radius: 12px; font-weight: 700; font-size: 14px; text-align: right; }
-.rsel .op i { font-style: normal; width: 28px; height: 28px; border-radius: 99px; background: var(--raise); border: 1px solid var(--line); display: grid; place-items: center; font-size: 13px; font-weight: 900; flex: none; }
-.rsel .op .nm { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.rsel .op .ck { color: var(--gold); opacity: 0; }
-.rsel .op.on { background: var(--raise); }
-.rsel .op.on i { background: var(--gold); color: #1a1204; border-color: var(--gold); }
-.rsel .op.on .ck { opacity: 1; }
-.rsel .op.bad i { background: var(--bad); color: #fff; }
-.grid.home2 { display: block; max-width: 1000px; margin: 0 auto; }
+#wrap { overflow-y: auto; padding: 14px 16px 40px; min-height: 0; }
 .sec { display: flex; align-items: center; gap: 10px; margin: 18px 4px 10px; font-weight: 900; font-size: 15px; }
 .sec:after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg,transparent,var(--line)); }
-.sec em { font-style: normal; color: var(--mute); font-size: 12px; font-weight: 700; }
 .tiles { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; }
-@media (min-width:760px){ .tiles { grid-template-columns: repeat(4,1fr); } }
+@media (min-width:760px){ .tiles { grid-template-columns: repeat(3,1fr); } }
 .tile { position: relative; overflow: hidden; border-radius: 22px; padding: 16px; min-height: 128px; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start; text-align: right; color: #fff; background: linear-gradient(150deg,var(--a),var(--b)); box-shadow: 0 12px 28px -14px var(--a); border: 1px solid rgba(255,255,255,.08); }
-.tile:before { content: ''; position: absolute; inset-inline-end: -26px; top: -26px; width: 110px; height: 110px; border-radius: 50%; background: rgba(255,255,255,.10); }
-.tile:after { content: ''; position: absolute; inset-inline-start: -40px; bottom: -50px; width: 130px; height: 130px; border-radius: 50%; background: rgba(0,0,0,.12); }
-.tile .ti2 { width: 46px; height: 46px; border-radius: 14px; background: rgba(255,255,255,.18); display: grid; place-items: center; position: relative; z-index: 1; }
-.tile .ti2 svg { width: 26px; height: 26px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .tile b { font-size: 19px; font-weight: 900; position: relative; z-index: 1; margin-top: 10px; }
 .tile small { font-size: 12px; font-weight: 700; opacity: .9; position: relative; z-index: 1; }
-.tile .lockb { position: absolute; top: 10px; inset-inline-end: 12px; font-size: 18px; z-index: 1; }
-.tile .lvb { position: absolute; top: 12px; inset-inline-end: 12px; z-index: 1; background: #e53935; color: #fff; font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 999px; display: flex; align-items: center; gap: 5px; }
-.tile .lvb:before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #fff; animation: blink 1s infinite; }
-@keyframes blink { 50% { opacity: .25; } }
-.hero { display: flex; gap: 10px; overflow-x: auto; padding: 2px 2px 8px; scroll-snap-type: x mandatory; scrollbar-width: none; }
-.hero::-webkit-scrollbar, .strip::-webkit-scrollbar { display: none; }
-.lcard { flex: none; width: min(280px,78vw); scroll-snap-align: start; border-radius: 20px; padding: 12px 14px; background: radial-gradient(120% 140% at 100% 0%,rgba(229,57,53,.22),transparent 55%),linear-gradient(160deg,var(--raise),var(--panel)); border: 1px solid var(--line); text-align: center; }
-.lcard.on { border-color: rgba(229,57,53,.55); }
-.lcard .lh { display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: var(--mute); font-weight: 700; margin-bottom: 8px; gap: 6px; }
-.lcard .lh span { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-.lcard .lh i { font-style: normal; flex: none; background: #e53935; color: #fff; padding: 1px 8px; border-radius: 999px; }
-.lcard .lh i.up { background: var(--raise); color: var(--gold); border: 1px solid var(--line); }
-.lcard .lt { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 6px; }
-.lcard .lt > div:not(.ls) { display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 0; }
-.lcard .lt img, .lcard .lt .ini { width: 36px; height: 36px; object-fit: contain; }
-.lcard .lt > div:not(.ls) > span { font-size: 12px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
-.lcard .lt > .ls { font-size: 24px; font-weight: 900; display: flex; gap: 8px; align-items: center; }
-.lcard .lt > .ls.tm { font-size: 15px; color: var(--gold); }
-.strip { display: flex; gap: 10px; overflow-x: auto; padding: 2px 2px 8px; scrollbar-width: none; }
-.chip { flex: none; width: 112px; border-radius: 16px; background: var(--panel); border: 1px solid var(--line); padding: 10px 8px; display: flex; flex-direction: column; align-items: center; gap: 6px; }
-.chip .cl { width: 72px; height: 46px; display: grid; place-items: center; border-radius: 10px; background: linear-gradient(160deg,#15253b,#0d1827); }
-.chip .cl img { max-width: 90%; max-height: 90%; object-fit: contain; }
-.chip b { font-size: 12px; font-weight: 700; line-height: 1.4; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.soc2 { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin: 20px auto 6px; max-width: 600px; }
-.soc2 a { display: inline-flex; align-items: center; gap: 7px; padding: 9px 15px; border-radius: 999px; font-size: 13px; font-weight: 800; color: #fff; text-decoration: none; background: var(--c); box-shadow: 0 8px 18px -10px var(--c); }
-.soc2 a span { font-size: 15px; }
-.sec .clr { margin-inline-start: auto; font-size: 12px; font-weight: 700; color: var(--mute); background: var(--panel); border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; }
-.sec .clr:active { color: var(--bad); }
-.favhint { background: var(--panel); border: 1px dashed var(--line); border-radius: 14px; padding: 14px; color: var(--mute); font-size: 13px; text-align: center; line-height: 1.8; }
 .errc { border-radius: 18px; padding: 14px; background: rgba(255,107,107,.08); border: 1px solid rgba(255,107,107,.35); color: #ffc2c2; text-align: center; line-height: 1.9; margin-top: 6px; }
-#upd, #pinBox { position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 99990; background: rgba(5,10,18,.85); display: grid; place-items: center; padding: 20px; }
-#upd .ub, #pinBox .ub { width: min(420px,100%); background: var(--panel); border: 1px solid var(--gold); border-radius: 20px; padding: 22px 18px; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,.6); }
-#upd .ub .ic, #pinBox .ub .ic { font-size: 44px; line-height: 1.2; }
-#upd .ub h3, #pinBox .ub h3 { font-size: 20px; font-weight: 900; margin: 6px 0; }
-#upd .ub p, #pinBox .ub p { color: var(--mute); font-size: 14px; line-height: 1.9; margin-bottom: 14px; }
-#upd .ub p b { color: var(--gold); }
-#upd .ub .row, #pinBox .ub .row { gap: 10px; }
-.days { display: flex; gap: 8px; justify-content: center; grid-column: 1/-1; margin-bottom: 4px; }
-.dtab { padding: 8px 18px; border-radius: 999px; background: var(--panel); border: 1px solid var(--line); font-weight: 800; font-size: 14px; }
-.dtab.on { background: var(--gold); color: #1a1204; border-color: var(--gold); }
-.lgh { grid-column: 1/-1; color: var(--gold); font-weight: 900; font-size: 14px; margin: 10px 4px 2px; display: flex; align-items: center; gap: 8px; }
-.lgh:after { content: ''; flex: 1; height: 1px; background: var(--line); }
-.mrow { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 8px; background: var(--panel); border: 1px solid var(--line); border-radius: var(--r); padding: 10px 12px; text-align: center; position: relative; }
-.mrow.lv { border-color: rgba(229,57,53,.6); box-shadow: inset 0 0 0 1px rgba(229,57,53,.35); }
-.mrow .tm { display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 0; }
-.mrow .tm img, .mrow .tm .ini { width: 34px; height: 34px; object-fit: contain; }
-.mrow .tm span { font-size: 13px; font-weight: 700; line-height: 1.3; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
-.mrow .sc { min-width: 74px; display: flex; flex-direction: column; align-items: center; gap: 2px; }
-.mrow .sc b { font-size: 20px; font-weight: 900; display: flex; gap: 8px; align-items: center; }
-.mrow .sc b em { font-style: normal; color: var(--mute); }
-.mrow .sc i { font-style: normal; font-size: 11px; color: var(--mute); }
-.mrow.lv .sc i { color: #fff; background: #e53935; padding: 0 7px; border-radius: 6px; font-weight: 700; }
-.mrow.done .sc b { color: var(--mute); }
-.mrow .tv { position: absolute; top: 6px; left: 8px; font-size: 12px; opacity: .7; }
-.mhead { grid-column: 1/-1; background: var(--panel); border: 1px solid var(--line); border-radius: var(--r); padding: 12px; text-align: center; font-weight: 800; line-height: 1.8; }
-.mhead small { display: block; color: var(--mute); font-weight: 600; font-size: 12px; }
 .grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(160px,1fr)); gap: 10px; }
-.grid.start { grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: 14px; max-width: 960px; margin: 0 auto; }
-.grid.rows { grid-template-columns: repeat(auto-fill,minmax(260px,1fr)); gap: 8px; }
-.grid.mts { grid-template-columns: repeat(auto-fill,minmax(300px,1fr)); gap: 8px; max-width: 1100px; margin: 0 auto; }
 .gcard { background: var(--panel); border: 1px solid var(--line); border-radius: var(--r); padding: 14px; text-align: right; display: flex; flex-direction: column; justify-content: center; gap: 6px; min-height: 88px; }
-.gcard b { font-size: 15px; font-weight: 800; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.gcard b { font-size: 15px; font-weight: 800; line-height: 1.5; }
 .gcard small { color: var(--cyan); font-size: 12px; font-weight: 700; }
-.gcard.fav { border-color: rgba(240,185,74,.5); }
-.gcard.fav b { color: var(--gold); }
-.card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; text-align: right; position: relative; display: flex; align-items: center; }
-.card .lg { width: 78px; flex: none; aspect-ratio: 16/10; display: grid; place-items: center; background: linear-gradient(160deg,#15253b,#0d1827); padding: 6px; }
-.card.mv .lg { width: 52px; aspect-ratio: 2/3; }
-.card img { max-width: 100%; max-height: 100%; object-fit: contain; }
-.ini { font-size: 17px; font-weight: 900; color: var(--cyan); opacity: .85; }
-.card .nm { padding: 8px 12px; font-size: 14px; font-weight: 600; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.card.playing { border-color: var(--cyan); box-shadow: inset 0 0 0 2px var(--cyan); }
-.card.playing .nm { color: var(--cyan); }
-#sentinel { height: 2px; }
-#player { position: sticky; top: 0; z-index: 20; background: #000; display: none; width: 100%; aspect-ratio: 16/9; max-height: 60vh; border-radius: var(--r); overflow: hidden; margin-bottom: 14px; box-shadow: 0 10px 30px rgba(0,0,0,.5); }
-#player.on { display: block; }
-#player.fs { position: fixed; top: 0; left: 0; right: 0; bottom: 0; width: 100%; height: 100% !important; aspect-ratio: auto; max-height: none; border-radius: 0; margin: 0; z-index: 60; }
-#vid { width: 100%; height: 100%; object-fit: contain; background: #000; }
-.spin { position: absolute; top: 50%; left: 50%; width: 50px; height: 50px; margin: -25px; border: 4px solid #ffffff2a; border-top-color: var(--gold); border-radius: 50%; animation: rot .8s linear infinite; display: none; }
-#player.wait .spin { display: block; }
-@keyframes rot { to { transform: rotate(360deg); } }
-#srvBar { position: absolute; top: 10px; left: 10px; display: flex; gap: 7px; z-index: 11; direction: ltr; }
-.srv { width: 32px; height: 32px; border-radius: 50%; background: #fff; color: #0a1320; font-weight: 900; font-size: 14px; display: grid; place-items: center; opacity: .9; box-shadow: 0 2px 8px rgba(0,0,0,.5); }
-.srv.on { background: var(--gold); opacity: 1; box-shadow: 0 0 0 3px rgba(240,185,74,.45); }
-.srv.ext { background: var(--cyan); }
-#fsBack { display: none; position: absolute; top: calc(10px + env(safe-area-inset-top,0px)); right: 10px; z-index: 8; padding: 8px 14px; font-size: 14px; }
-#player.fs #fsBack { display: inline-flex; }
-#player.fs #closeP { visibility: hidden; }
-#tapPlay { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); z-index: 6; font-size: 18px; padding: 14px 26px; border-radius: 40px; }
-#pstat { position: absolute; bottom: 6px; left: 8px; right: 8px; font-size: 11px; color: #9fb0c6; z-index: 5; direction: ltr; text-align: left; pointer-events: none; }
-.perr { position: absolute; top: 0; left: 0; right: 0; bottom: 0; overflow: auto; background: rgba(10,19,32,.95); padding: 48px 10px 10px; text-align: center; line-height: 1.8; font-size: 13px; display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 9; }
-.perr.on { display: flex; }
-#player:not(.fs) .perr > span, #player:not(.fs) #perrLog { display: none; }
-.perr b { color: var(--bad); display: block; font-size: 15px; }
-.perr .row { margin-top: 6px; gap: 6px; }
-.perr .btn { padding: 8px 12px; font-size: 13px; }
-#perrLog { white-space: pre-wrap; direction: ltr; text-align: left; font-family: monospace; font-size: 11px; line-height: 1.5; color: #9fb0c6; margin-top: 8px; word-break: break-all; }
-.hud { position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; opacity: 0; transition: opacity .25s; }
-#player.hud-on .hud { opacity: 1; pointer-events: auto; }
-.hud .top { position: absolute; top: 0; left: 0; right: 0; padding: 10px 12px 28px; padding-top: calc(10px + env(safe-area-inset-top,0px)); background: linear-gradient(#000c,transparent); display: flex; align-items: center; gap: 10px; }
-.lgx { width: 38px; height: 38px; border-radius: 10px; background: #ffffff14; display: grid; place-items: center; overflow: hidden; flex: none; }
-.lgx img { max-width: 90%; max-height: 90%; }
-.ti { min-width: 0; flex: 1; }
-.ti b { display: block; font-size: 16px; font-weight: 900; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.ti small { color: #b9c6d8; font-size: 12px; }
-.live { display: inline-block; background: #e53935; color: #fff; font-size: 10px; font-weight: 700; padding: 1px 7px; border-radius: 6px; margin-inline-start: 8px; vertical-align: middle; }
-.hud .bot { position: absolute; bottom: 0; left: 0; right: 0; padding: 28px 12px 10px; padding-bottom: calc(10px + env(safe-area-inset-bottom,0px)); background: linear-gradient(transparent,#000d); }
-.seek { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; direction: ltr; font-size: 12px; color: #cfd8e6; }
-.seek input { flex: 1; accent-color: var(--gold); }
-.ctr { display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; }
-.pb { width: 42px; height: 42px; border-radius: 50%; background: #ffffff1c; display: grid; place-items: center; }
-.pb svg { width: 20px; height: 20px; fill: #fff; }
-.pb.big { width: 52px; height: 52px; background: var(--gold); }
-.pb.big svg { fill: #1a1204; }
-.pb.favb svg { fill: none; stroke: #fff; stroke-width: 1.6; }
-.pb.favb.on { background: rgba(240,185,74,.22); }
-.pb.favb.on svg { fill: var(--gold); stroke: var(--gold); }
-.pb.on svg { fill: var(--gold); }
-.card .favq { position: absolute; top: 4px; left: 4px; width: 30px; height: 30px; border-radius: 50%; background: rgba(10,19,32,.7); display: grid; place-items: center; font-size: 15px; color: #fff; z-index: 3; }
-.card .favq.on { color: var(--gold); }
-#player:not(.fs) #zapBtn, #player:not(.fs) .zap { display: none; }
-.zap { position: absolute; top: 0; bottom: 0; left: 0; width: min(340px,86vw); background: rgba(10,19,32,.95); transform: translateX(-105%); transition: transform .25s; display: flex; flex-direction: column; z-index: 10; }
-#player.zap-on .zap { transform: none; }
-.zap h4 { padding: 14px 16px 8px; font-size: 15px; color: var(--gold); }
-.zl { overflow-y: auto; padding: 0 10px 20px; flex: 1; }
-.zi { display: flex; align-items: center; gap: 10px; width: 100%; padding: 8px 10px; border-radius: 10px; text-align: right; font-size: 14px; font-weight: 600; }
-.zi .n { color: var(--mute); font-size: 12px; width: 30px; flex: none; text-align: center; }
-.zi span:last-child { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-.zi.cur { background: var(--raise); color: var(--cyan); }
 .toast { position: fixed; bottom: calc(22px + env(safe-area-inset-bottom,0px)); left: 50%; transform: translateX(-50%) translateY(20px); background: var(--raise); border: 1px solid var(--line); padding: 10px 18px; border-radius: 12px; font-size: 14px; opacity: 0; transition: .25s; z-index: 99999; pointer-events: none; max-width: 90vw; text-align: center; }
 .toast.on { opacity: 1; transform: translateX(-50%); }
-@media (max-width:760px){
-    #wrap { padding: 10px; }
-    header { gap: 8px; padding-left: 10px; padding-right: 10px; }
-    header .mk { width: 34px; height: 34px; }
-    header h2 { font-size: 15px; }
-    .ib { width: 38px; height: 38px; }
-    #player { margin: -10px -10px 10px; width: calc(100% + 20px); border-radius: 0; max-height: none; }
-    .grid.start { grid-template-columns: 1fr; gap: 10px; }
-    .grid { grid-template-columns: repeat(auto-fill,minmax(140px,1fr)); }
-    .grid.rows { grid-template-columns: 1fr; }
-}
-@media (min-width:1600px){
-    html { font-size: 120%; }
-    .grid.rows { grid-template-columns: repeat(auto-fill,minmax(320px,1fr)); }
-    .card .nm, .gcard b { font-size: 17px; }
-    #player { max-height: 50vh; }
-}
 </style>
 </head>
 <body>
@@ -265,123 +95,16 @@ header h2 { font-size: 16px; font-weight: 900; white-space: nowrap; overflow: hi
     <h2>تلفزيون أبو أحمد</h2>
     <small id="rname"></small>
     <span class="sp"></span>
-    <button class="ib fx" id="searchBtn" aria-label="بحث">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-    </button>
     <button class="ib fx" id="reloadBtn" aria-label="تحديث">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg>
     </button>
   </header>
-  <div id="sbar" class="hide">
-      <input id="q" class="fx" type="search" placeholder="ابحث في القسم الحالي..." autocomplete="off">
-      <button class="ib fx" id="sclose" aria-label="إغلاق البحث">✕</button>
-  </div>
-  <div id="catbar" class="hide">
-      <button class="fx" id="back"></button>
-      <b id="catTitle"></b>
-      <small id="catCount"></small>
-  </div>
   <div id="wrap">
-    <div id="player">
-      <video id="vid" playsinline webkit-playsinline></video>
-      <div class="spin"></div>
-      <div id="srvBar"></div>
-      <button id="fsBack" class="btn pri fx">→ رجوع للقنوات</button>
-      <button id="tapPlay" class="btn pri fx hide">▶ اضغط للتشغيل</button>
-      <div id="pstat"></div>
-      <div class="perr" id="perr">
-        <b>تعذّر تشغيل القناة</b>
-        <span>القناة متوقفة أو الخادم رفض الاتصال. جرّب مرة أخرى أو اختر قناة أخرى.</span>
-        <div class="row">
-            <button class="btn pri fx" id="retryBtn">إعادة المحاولة</button>
-            <button class="btn fx" id="nextErr">القناة التالية</button>
-            <button class="btn fx" id="closeErr">إغلاق</button>
-        </div>
-        <div class="row">
-            <button class="btn cy fx" id="extBtn">▶ تشغيل بمشغل الجوال</button>
-        </div>
-        <div id="perrLog"></div>
-      </div>
-      <div class="hud">
-        <div class="top">
-          <button class="pb fx" id="closeP" aria-label="إغلاق المشغل">
-              <svg viewBox="0 0 24 24"><path d="M18.3 5.7 12 12l6.3 6.3-1.4 1.4L10.6 13.4 4.3 19.7 2.9 18.3 9.2 12 2.9 5.7l1.4-1.4 6.3 6.3 6.3-6.3z"/></svg>
-          </button>
-          <div class="lgx" id="pLogo"></div>
-          <div class="ti">
-              <b id="pName"></b>
-              <small id="pGroup"></small>
-          </div>
-        </div>
-        <div class="bot">
-          <div class="seek hide" id="seekRow">
-              <span id="tCur">0:00</span>
-              <input type="range" id="seek" class="fx" min="0" max="100" step="0.1" value="0">
-              <span id="tDur">0:00</span>
-          </div>
-          <div class="ctr">
-            <button class="pb fx" id="zapBtn" aria-label="قائمة القنوات">
-                <svg viewBox="0 0 24 24"><path d="M3 5h18v2H3zm0 6h18v2H3zm0 6h18v2H3z"/></svg>
-            </button>
-            <button class="pb fx" id="prevBtn" aria-label="السابقة">
-                <svg viewBox="0 0 24 24"><path d="M16 6h2v12h-2zM6 18l8.5-6L6 6z"/></svg>
-            </button>
-            <button class="pb big fx" id="ppBtn" aria-label="تشغيل/إيقاف">
-                <svg viewBox="0 0 24 24" id="ppIco"><path d="M6 5h4v14H6zm8 0h4v14h-4z"/></svg>
-            </button>
-            <button class="pb fx" id="nextBtn" aria-label="التالية">
-                <svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6L18 18V6z"/></svg>
-            </button>
-            <button class="pb favb fx" id="favBtn" aria-label="المفضلة">
-                <svg viewBox="0 0 24 24"><path d="M12 17.3 18.2 21l-1.6-7 5.4-4.7-7.2-.6L12 2 9.2 8.7 2 9.3l5.4 4.7-1.6 7z"/></svg>
-            </button>
-            <button class="pb fx" id="muteBtn" aria-label="كتم الصوت">
-                <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9zm13.5 3A4.5 4.5 0 0 0 14 8v8a4.5 4.5 0 0 0 2.5-4z"/></svg>
-            </button>
-            <button class="pb fx" id="fsBtn" aria-label="ملء الشاشة">
-                <svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7zm-2-4h2V7h3V5H5zm12 7h-3v2h5v-5h-2zM14 5v2h3v3h2V5z"/></svg>
-            </button>
-          </div>
-        </div>
-      </div>
-      <div class="zap">
-          <h4 id="zapTitle"></h4>
-          <div class="zl" id="zapList"></div>
-      </div>
-    </div>
-    <div id="rbar" class="hide"></div>
-    <div id="grid" class="grid"></div>
-    <div id="sentinel"></div>
+    <div id="grid"></div>
   </div>
 </section>
 
 <div class="toast" id="toast"></div>
-
-<div id="pinBox" class="hide">
-  <div class="ub">
-    <div class="ic">🔒</div>
-    <h3>البث المدفوع</h3>
-    <p>أدخل الرقم السري للدخول</p>
-    <input id="pinInput" type="tel" inputmode="numeric" style="width:100%;background:var(--ink);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:18px;text-align:center;letter-spacing:4px;color:inherit" placeholder="••••">
-    <p id="pinErr" style="color:var(--bad);font-size:13px;min-height:18px;margin:8px 0"></p>
-    <div class="row">
-        <button class="btn pri fx" id="pinOk">دخول</button>
-        <button class="btn fx" id="pinCancel">إلغاء</button>
-    </div>
-  </div>
-</div>
-
-<div id="upd" class="hide">
-  <div class="ub">
-    <div class="ic">🎉</div>
-    <h3>يتوفر تحديث جديد</h3>
-    <p id="updTxt"></p>
-    <div class="row">
-        <button class="btn pri fx" id="updNow">⬇️ تحديث الآن</button>
-        <button class="btn fx" id="updLater">لاحقاً</button>
-    </div>
-  </div>
-</div>
 
 <script>
 window.onerror = function(msg, url, line) {
@@ -393,15 +116,7 @@ window.onerror = function(msg, url, line) {
 };
 
 window.ABU_CFG = {
-    PANEL: 'https://abuahmad-panel.abu7hmaad.workers.dev',
-    SOCIAL: [
-        { name: 'يوتيوب', icon: '▶️', color: '#ff0033', url: 'https://youtube.com/@vip_live_al' },
-        { name: 'إكس', icon: '✖️', color: '#444444', url: 'https://x.com/abu7hmaad_' },
-        { name: 'فيسبوك', icon: '📘', color: '#1877f2', url: 'https://www.facebook.com/share/191Ai3mV6a/' },
-        { name: 'تيك توك', icon: '🎵', color: '#ee1d52', url: 'https://www.tiktok.com/@ethiopi.1' },
-        { name: 'تيليجرام', icon: '✈️', color: '#229ed9', url: 'https://t.me/alialasiri0' },
-        { name: 'واتساب', icon: '💬', color: '#25d366', url: 'https://whatsapp.com/channel/0029VbDMx21ADTON9sEijL01' }
-    ]
+    PANEL: 'https://abuahmad-panel.abu7hmaad.workers.dev'
 };
 </script>
 
@@ -410,24 +125,19 @@ window.ABU_CFG = {
     "use strict";
 
     const $ = function(s) { return document.querySelector(s); };
-    const $$ = function(s) { return Array.from(document.querySelectorAll(s)); };
 
     const storage = {
         get: function(k, d) {
             try {
                 const v = localStorage.getItem("abuahmad_iptv_" + k);
                 return v == null ? d : JSON.parse(v);
-            } catch (e) {
-                return d;
-            }
+            } catch (e) { return d; }
         },
         set: function(k, v) {
             try {
                 localStorage.setItem("abuahmad_iptv_" + k, JSON.stringify(v));
                 return true;
-            } catch (e) {
-                return false;
-            }
+            } catch (e) { return false; }
         }
     };
 
@@ -442,36 +152,16 @@ window.ABU_CFG = {
     };
 
     const panelUrl = String((window.ABU_CFG || {}).PANEL || "").trim().replace(/\/+$/, "");
-    const isNative = !(!window.AbuNative || !window.AbuNative.play);
 
     let state = {
         rcv: [],
-        custom: [],
         ri: 0,
         rx: null,
-        mode: "",
-        srcName: "",
-        rErr: "",
-        all: [],
-        loaded: {},
-        counts: {},
-        type: "live",
-        group: "__all",
-        q: "",
-        list: [],
-        shown: 0,
-        view: "start",
-        series: null,
-        searching: null,
-        skipPop: false,
-        fsPushed: false,
-        fav: new Set(storage.get("fav", []))
+        rErr: ""
     };
 
-    let creds = {};
-
     async function fetchProxy(url, timeoutMs) {
-        if (panelUrl && !isNative && (location.protocol === 'https:' || url.startsWith('http:')) && !url.startsWith(panelUrl)) {
+        if (panelUrl && (location.protocol === 'https:' || url.startsWith('http:')) && !url.startsWith(panelUrl)) {
             url = panelUrl + "/m3u?url=" + encodeURIComponent(url);
         }
         return fetchRaw(url, timeoutMs);
@@ -491,23 +181,13 @@ window.ABU_CFG = {
         }
     }
 
-    async function fetchXtreamApi(action) {
-        const targetUrl = creds.base + "/player_api.php?username=" + encodeURIComponent(creds.u) + "&password=" + encodeURIComponent(creds.p) + (action ? "&action=" + action : "");
-        const respText = await fetchProxy(targetUrl, 60000);
-        try {
-            return JSON.parse(respText);
-        } catch (e) {
-            throw new Error("رد غير صالح من السيرفر");
-        }
-    }
-
     function parseConfig(cfg) {
         const rcvList = [];
         ((cfg || {}).xtream || []).forEach(function(x) {
             if (x && isUrl(x.server) && x.username && x.password) {
                 rcvList.push({
                     k: "xt",
-                    name: x.name,
+                    name: x.name || "رسيفر Xtream",
                     server: String(x.server).trim().replace(/\/+$/, ""),
                     username: String(x.username).trim(),
                     password: String(x.password).trim()
@@ -517,60 +197,57 @@ window.ABU_CFG = {
 
         ((cfg || {}).m3u || []).concat(cfg.files || []).forEach(function(m) {
             if (!m || !isUrl(m.url)) return;
-            rcvList.push({ k: "m3u", name: m.name, url: String(m.url).trim() });
-        });
-
-        rcvList.forEach(function(r, idx) {
-            r.name = String(r.name || "").trim() || ("رسيفر " + (idx + 1));
+            rcvList.push({ k: "m3u", name: m.name || "قائمة M3U", url: String(m.url).trim() });
         });
 
         state.rcv = rcvList;
     }
 
-    async function loadReceiver(index) {
-        const rcv = state.rcv[index];
-        state.ri = index;
-        storage.set("rcv", index);
-        state.rx = rcv || null;
-        state.mode = rcv ? rcv.k : "";
-        state.srcName = rcv ? rcv.name : "";
-
-        if (rcv && rcv.k === "xt") {
-            creds = { base: rcv.server, u: rcv.username, p: rcv.password };
-            try {
-                const info = await fetchXtreamApi("");
-                if (!info || !info.user_info || info.user_info.auth !== 1) {
-                    throw new Error("بيانات الاشتراك غير صحيحة");
-                }
-            } catch (e) {
-                state.rErr = e.message;
-            }
-        }
-
-        renderApp();
-    }
-
     function renderApp() {
         $("#boot").classList.add("hide");
         $("#app").classList.remove("hide");
-        $("#rname").textContent = state.rcv.length > 1 && state.rx ? "📡 " + (state.ri + 1) + " – " + state.srcName : "";
         
-        let html = '<div class="sec">📡 تلفزيون أبو أحمد</div>';
-        if (state.rErr) {
-            html += '<div class="errc">⚠️ هذا الرسيفر لا يعمل حالياً: ' + escapeHtml(state.rErr) + '</div>';
-        } else {
-            html += '<div class="favhint">تم تحميل القنوات بنجاح والاتصال بالخادم شغال بدون مشاكل.</div>';
+        if (!state.rcv.length) {
+            $("#rname").textContent = "";
+            $("#grid").innerHTML = `
+                <div class="empty">
+                    ⚠️ لم يتم العثور على أي رسيفرات في اللوحة.<br>
+                    يرجى التأكد من إضافة بيانات الاشتراكات (Xtream أو M3U) داخل لوحة وركر Cloudflare.
+                </div>
+            `;
+            return;
         }
-        
+
+        const rx = state.rcv[state.ri];
+        $("#rname").textContent = "📡 " + rx.name;
+
+        let html = `
+            <div class="sec">📺 المحتوى المتاح في ${escapeHtml(rx.name)}</div>
+            <div class="tiles">
+                <div class="tile" style="--a:#103b68; --b:#0c2544;">
+                    <b>📡 القنوات المباشرة</b>
+                    <small>جميع الباقات والقنوات</small>
+                </div>
+                <div class="tile" style="--a:#68103b; --b:#440c25;">
+                    <b>🎬 مكتبة الأفلام</b>
+                    <small>أحدث الأفلام المترجمة</small>
+                </div>
+                <div class="tile" style="--a:#106841; --b:#0c442b;">
+                    <b>🎞️ المسلسلات</b>
+                    <small>المواسم والحلقات</small>
+                </div>
+            </div>
+        `;
+
         $("#grid").innerHTML = html;
     }
 
     async function init() {
         $("#msg").className = "msg";
-        $("#msg").textContent = "جاري التحميل…";
+        $("#msg").textContent = "جاري جلب الإعدادات…";
         
         try {
-            if (!panelUrl) throw new Error("رابط لوحة التحكم غير مضبوط");
+            if (!panelUrl) throw new Error("رابط اللوحة غير مضبوط");
             const configText = await fetchProxy(panelUrl + "/config", 15000);
             const cfg = JSON.parse(configText);
             storage.set("panel", cfg);
@@ -587,20 +264,12 @@ window.ABU_CFG = {
             }
         }
 
-        if (!state.rcv.length) {
-            $("#msg").className = "msg err";
-            $("#msg").textContent = "لا توجد رسيفرات مضافة.";
-            $("#retry").classList.remove("hide");
-            return;
-        }
-
-        let index = +storage.get("rcv", 0) || 0;
-        if (index < 0 || index >= state.rcv.length) index = 0;
-        await loadReceiver(index);
+        renderApp();
     }
 
     document.addEventListener("DOMContentLoaded", function() {
         $("#retry").onclick = init;
+        $("#reloadBtn").onclick = init;
         init();
     });
 })();
