@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>تلفزيون أبو أحمد</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="أبو أحمد TV">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/716/716078.png">
+    <link rel="manifest" href="manifest.json">
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <style>
+        body {
+            margin: 0;
+            background-color: #0b0f19;
+            color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+        header {
+            background-color: #111827;
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            border-bottom: 1px solid #1f2937;
+        }
+        .player-container {
+            width: 100%;
+            background-color: #000;
+            aspect-ratio: 16/9;
+        }
+        video {
+            width: 100%;
+            height: 100%;
+        }
+        .channels-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 12px;
+        }
+        .channel-card {
+            background-color: #1f2937;
+            padding: 20px 10px;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: background 0.2s;
+            border: 1px solid #374151;
+        }
+        .channel-card:active {
+            background-color: #374151;
+        }
+    </style>
+</head>
+<body>
+    <header>📺 تلفزيون أبو أحمد المباشر</header>
+    <div class="player-container">
+        <video id="video" controls autoplay playsinline></video>
+    </div>
+    <div class="channels-list">
+        <div class="channel-card" onclick="playStream('https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8')">قناة تجريبية 1</div>
+        <div class="channel-card" onclick="playStream('https://diceyk6a7mf6s.cloudfront.net/hls/dimsum.m3u8')">قناة تجريبية 2</div>
+    </div>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js');
+            });
+        }
+        function playStream(url) {
+            const video = document.getElementById('video');
+            if (Hls.isSupported()) {
+                const hls = new Hls();
+                hls.loadSource(url);
+                hls.attachMedia(video);
+                hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                    video.play();
+                });
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                video.src = url;
+                video.addEventListener('loadedmetadata', function() {
+                    video.play();
+                });
+            }
+        }
+    </script>
+</body>
+</html>
