@@ -7,10 +7,7 @@
 <title>تلفزيون أبو أحمد</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
-
-<!-- مكتبة مشغل Clappr -->
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@clappr/player@latest/dist/clappr.min.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 <style>
 :root {
     --ink: #0a1320;
@@ -58,10 +55,10 @@ header h2 { font-size: 16px; font-weight: 900; }
 .gcard b { font-size: 14px; font-weight: 800; line-height: 1.4; color: var(--text); }
 .gcard small { color: var(--cyan); font-size: 12px; }
 
-/* حاوية مشغل Clappr */
-#player-container { margin-bottom: 20px; background: #000; border-radius: 16px; overflow: hidden; display: none; text-align: center; padding-bottom: 10px; }
-#player { width: 100%; aspect-ratio: 16/9; background: #000; }
-.player-actions { margin-top: 10px; display: flex; gap: 10px; justify-content: center; }
+/* المشغل وحاوياته */
+#player-container { margin-bottom: 20px; background: #000; border-radius: 16px; overflow: hidden; display: none; text-align: center; padding-bottom: 12px; }
+video { width: 100%; aspect-ratio: 16/9; display: block; background: #000; }
+.player-actions { margin-top: 12px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; padding: 0 10px; }
 </style>
 </head>
 <body>
@@ -87,9 +84,10 @@ header h2 { font-size: 16px; font-weight: 900; }
 
   <div id="wrap">
     <div id="player-container">
-        <div id="player"></div>
+        <video id="vid" controls autoplay playsinline></video>
         <div class="player-actions">
-            <a id="externalBtn" href="#" target="_blank" class="btn pri">🔗 فتح البث المباشر في مشغل خارجي / VLC</a>
+            <a id="vlcBtn" href="#" class="btn pri" target="_blank">🚀 تشغيل في تطبيق خارجي / VLC</a>
+            <a id="webPlayerBtn" href="#" class="btn" target="_blank">🌐 فتح البث في مشغل Web HLS</a>
         </div>
     </div>
     <div id="main-content"></div>
@@ -104,7 +102,7 @@ window.ABU_CFG = { PANEL: 'https://abuahmad-receiver.abu7hmaad.workers.dev' };
 
     const $ = s => document.querySelector(s);
     let state = { rcv: [], curRx: null, mode: 'home', categories: [], streams: [], activeType: 'live' };
-    let playerInstance = null;
+    let hls = null;
 
     async function fetchApi(url) {
         const proxyUrl = window.ABU_CFG.PANEL + "/?url=" + encodeURIComponent(url);
@@ -235,36 +233,50 @@ window.ABU_CFG = { PANEL: 'https://abuahmad-receiver.abu7hmaad.workers.dev' };
 
     function playStream(rawUrl) {
         const container = $("#player-container");
-        const externalBtn = $("#externalBtn");
-
+        const video = $("#vid");
         container.style.display = 'block';
-        externalBtn.href = rawUrl;
 
-        // تمرير رابط القناة عبر الوركر لتجاوز حظر HTTP و CORS
-        const proxiedStreamUrl = window.ABU_CFG.PANEL + "/?url=" + encodeURIComponent(rawUrl);
+        // روابط المشغلات الخارجية المقترحة
+        $("#vlcBtn").href = rawUrl;
+        $("#webPlayerBtn").href = "https://hlsjs.video-dev.org/demo/?src=" + encodeURIComponent(rawUrl);
 
-        if (playerInstance) {
-            playerInstance.destroy();
+        const proxiedUrl = window.ABU_CFG.PANEL + "/?url=" + encodeURIComponent(rawUrl);
+
+        if (hls) {
+            hls.destroy();
         }
 
-        // إعداد مشغل Clappr
-        playerInstance = new Clappr.Player({
-            source: proxiedStreamUrl,
-            parentId: "#player",
-            width: '100%',
-            height: '100%',
-            autoPlay: true,
-            mimeType: "application/x-mpegURL"
-        });
+        if (Hls.isSupported()) {
+            hls = new Hls({
+                enableWorker: true,
+                lowLatencyMode: true,
+                fetchSetup: function(context, initParams) {
+                    initParams.referrerPolicy = 'no-referrer';
+                    return new Request(context.url, initParams);
+                }
+            });
+            hls.loadSource(proxiedUrl);
+            hls.attachMedia(video);
+            hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                video.play().catch(() => {});
+            });
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = proxiedUrl;
+            video.play().catch(() => {});
+        } else {
+            video.src = rawUrl;
+            video.play().catch(() => {});
+        }
 
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     $("#backBtn").onclick = () => {
-        if (playerInstance) {
-            playerInstance.destroy();
-            playerInstance = null;
+        if (hls) {
+            hls.destroy();
+            hls = null;
         }
+        $("#vid").pause();
         $("#player-container").style.display = 'none';
         if (state.mode === 'streams') {
             renderCategories(state.activeType);
