@@ -99,13 +99,12 @@ window.ABU_CFG = { PANEL: 'https://abuahmad-receiver.abu7hmaad.workers.dev' };
     let hlsPlayer = null;
 
     async function fetchApi(url) {
-        // توجيه جميع طلبات الـ API عبر الوركر لتجاوز حظر الـ CORS
         const proxyUrl = window.ABU_CFG.PANEL + "/?url=" + encodeURIComponent(url);
         try {
             const res = await fetch(proxyUrl);
-            return await res.json();
+            const text = await res.text();
+            return JSON.parse(text);
         } catch (e) {
-            // في حال فشل البروكسي نحاول الاتصال المباشر
             const direct = await fetch(url);
             return await direct.json();
         }
@@ -118,6 +117,8 @@ window.ABU_CFG = { PANEL: 'https://abuahmad-receiver.abu7hmaad.workers.dev' };
             state.rcv = data.xtream || [];
             if (state.rcv.length) {
                 state.curRx = state.rcv[0];
+                // تنظيف رابط السيرفر من / الأخيرة
+                state.curRx.server = String(state.curRx.server || "").replace(/\/+$/, "");
                 $("#rname").textContent = "📡 " + state.curRx.name;
                 renderHome();
                 $("#boot").classList.add("hide");
