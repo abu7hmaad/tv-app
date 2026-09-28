@@ -42,7 +42,7 @@ header .mk { width: 38px; height: 38px; border-radius: 11px; background: var(--g
 header h2 { font-size: 16px; font-weight: 900; }
 #rname { color: var(--cyan); font-size: 12px; font-weight: 700; }
 .sp { flex: 1; }
-.ib { width: 40px; height: 40px; border-radius: 12px; background: var(--raise); border: 1px solid var(--line); display: grid; place-items: center; flex: none; }
+.ib { width: 40px; height: 40px; border-radius: 12px; background: var(--raise); border: 1px solid var(--line); display: grid; place-items: center; flex: none; color: var(--text); }
 .ib svg { width: 20px; height: 20px; stroke: currentColor; }
 #wrap { padding: 16px; max-width: 1200px; margin: 0 auto; }
 .sec { display: flex; align-items: center; gap: 10px; margin: 16px 0; font-weight: 900; font-size: 16px; }
@@ -95,8 +95,21 @@ window.ABU_CFG = { PANEL: 'https://abuahmad-receiver.abu7hmaad.workers.dev' };
     "use strict";
 
     const $ = s => document.querySelector(s);
-    let state = { rcv: [], curRx: null, mode: 'home', categories: [], streams: [] };
+    let state = { rcv: [], curRx: null, mode: 'home', categories: [], streams: [], activeType: 'live' };
     let hlsPlayer = null;
+
+    async function fetchApi(url) {
+        // توجيه جميع طلبات الـ API عبر الوركر لتجاوز حظر الـ CORS
+        const proxyUrl = window.ABU_CFG.PANEL + "/?url=" + encodeURIComponent(url);
+        try {
+            const res = await fetch(proxyUrl);
+            return await res.json();
+        } catch (e) {
+            // في حال فشل البروكسي نحاول الاتصال المباشر
+            const direct = await fetch(url);
+            return await direct.json();
+        }
+    }
 
     async function init() {
         try {
@@ -139,31 +152,33 @@ window.ABU_CFG = { PANEL: 'https://abuahmad-receiver.abu7hmaad.workers.dev' };
         `;
 
         document.querySelectorAll('.tile').forEach(el => {
-            el.onclick = () => loadCategories(el.dataset.type);
+            el.onclick = () => {
+                state.activeType = el.dataset.type;
+                loadCategories(el.dataset.type);
+            };
         });
     }
 
     async function loadCategories(type) {
         $("#main-content").innerHTML = `<div class="sec">جاري تحميل الأقسام...</div>`;
         const action = type === 'live' ? 'get_live_categories' : type === 'movie' ? 'get_vod_categories' : 'get_series_categories';
-        const url = `${state.curRx.server}/player_api.php?username=${state.curRx.username}&password=${state.curRx.password}&action=${action}`;
+        const targetUrl = `${state.curRx.server}/player_api.php?username=${state.curRx.username}&password=${state.curRx.password}&action=${action}`;
 
         try {
-            const res = await fetch(url);
-            const cats = await res.json();
-            state.categories = cats;
+            const cats = await fetchApi(targetUrl);
+            state.categories = Array.isArray(cats) ? cats : [];
             renderCategories(type);
         } catch (e) {
-            $("#main-content").innerHTML = `<div class="sec">تعذّر جلب الأقسام</div>`;
+            $("#main-content").innerHTML = `<div class="sec">تعذّر جلب الأقسام: ${e.message}</div>`;
         }
     }
 
     function renderCategories(type) {
         state.mode = 'cats';
         $("#backBtn").classList.remove("hide");
-        let html = `<div class="sec">📂 الأقسام المتاحة</div><div class="grid">`;
+        let html = `<div class="sec">📂 الأقسام المتاحة (${state.categories.length})</div><div class="grid">`;
         state.categories.forEach(c => {
-            html += `<div class="gcard fx" data-id="${c.category_id}" data-type="${type}">
+            html += `<div class="gcard fx cat-btn" data-id="${c.category_id}">
                 <b>${c.category_name}</b>
                 <small>اضغط لفتح القنوات</small>
             </div>`;
@@ -171,20 +186,19 @@ window.ABU_CFG = { PANEL: 'https://abuahmad-receiver.abu7hmaad.workers.dev' };
         html += `</div>`;
         $("#main-content").innerHTML = html;
 
-        document.querySelectorAll('.gcard').forEach(el => {
-            el.onclick = () => loadStreams(el.dataset.type, el.dataset.id);
+        document.querySelectorAll('.cat-btn').forEach(el => {
+            el.onclick = () => loadStreams(type, el.dataset.id);
         });
     }
 
     async function loadStreams(type, catId) {
         $("#main-content").innerHTML = `<div class="sec">جاري جلب القائمة...</div>`;
         const action = type === 'live' ? 'get_live_streams' : type === 'movie' ? 'get_vod_streams' : 'get_series_streams';
-        const url = `${state.curRx.server}/player_api.php?username=${state.curRx.username}&password=${state.curRx.password}&action=${action}&category_id=${catId}`;
+        const targetUrl = `${state.curRx.server}/player_api.php?username=${state.curRx.username}&password=${state.curRx.password}&action=${action}&category_id=${catId}`;
 
         try {
-            const res = await fetch(url);
-            const streams = await res.json();
-            renderStreams(streams, type);
+            const streams = await fetchApi(targetUrl);
+            renderStreams(Array.isArray(streams) ? streams : [], type);
         } catch (e) {
             $("#main-content").innerHTML = `<div class="sec">تعذّر تحميل القنوات</div>`;
         }
@@ -192,7 +206,7 @@ window.ABU_CFG = { PANEL: 'https://abuahmad-receiver.abu7hmaad.workers.dev' };
 
     function renderStreams(streams, type) {
         state.mode = 'streams';
-        let html = `<div class="sec">📺 القنوات والمحتوى</div><div class="grid">`;
+        let html = `<div class="sec">📺 المحتوى المتاح (${streams.length})</div><div class="grid">`;
         streams.forEach(s => {
             const streamId = s.stream_id || s.series_id;
             const ext = type === 'live' ? 'm3u8' : 'mp4';
@@ -229,7 +243,7 @@ window.ABU_CFG = { PANEL: 'https://abuahmad-receiver.abu7hmaad.workers.dev' };
     $("#backBtn").onclick = () => {
         $("#player-container").style.display = 'none';
         if (state.mode === 'streams') {
-            renderCategories('live');
+            renderCategories(state.activeType);
         } else {
             renderHome();
         }
