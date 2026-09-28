@@ -1,74 +1,181 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0a1320">
-<title>تلفزيون أبو أحمد</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.13/dist/hls.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/mpegts.js@1.7.3/dist/mpegts.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/dashjs@4.7.4/dist/dash.all.min.js"></script>
-<style>
-:root{--ink:#0a1320;--panel:#101c2d;--raise:#172840;--line:#233650;--gold:#f0b94a;--cyan:#3fd3e6;--text:#e8eef7;--mute:#8798b0;--bad:#ff6b6b;--r:14px}*{box-sizing:border-box;margin:0;padding:0}html,body{height:100%;width:100%;max-width:100%;overflow-x:hidden}body{background:var(--ink);color:var(--text);font-family:'Cairo',Tahoma,Arial,sans-serif;overflow:hidden}
-header { background: var(--panel); padding: 15px; text-align: center; font-weight: bold; font-size: 1.2rem; border-bottom: 1px solid var(--line); }
-.main-container { display: flex; flex-direction: column; height: calc(100vh - 60px); }
-.player-box { width: 100%; aspect-ratio: 16/9; background: #000; }
-video { width: 100%; height: 100%; }
-.channels-section { flex: 1; overflow-y: auto; padding: 15px; display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
-.channel-item { background: var(--raise); border: 1px solid var(--line); padding: 15px; border-radius: var(--r); text-align: center; cursor: pointer; font-weight: 600; }
-.channel-item:active { background: var(--gold); color: #000; }
-@media (min-width: 768px) { .main-container { flex-direction: row; } .player-box { flex: 2; height: 100%; } .channels-section { flex: 1; } }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>تلفزيون أبو أحمد</title>
+    
+    <!-- إعدادات التوافق الكامل مع الآيفون وتشغيل ملء الشاشة -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="أبو أحمد TV">
+    <link rel="apple-touch-icon" href="https://flaticon.com">
+    
+    <link rel="manifest" href="manifest.json">
+    <script src="https://jsdelivr.net"></script>
+
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --panel-color: #111827;
+            --accent-color: #2563eb;
+            --text-color: #ffffff;
+            --card-bg: #1f2937;
+            --card-border: #374151;
+        }
+        body {
+            margin: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+        header {
+            background-color: var(--panel-color);
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            border-bottom: 1px solid var(--card-border);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .main-layout {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            overflow: hidden;
+        }
+        .player-container {
+            width: 100%;
+            background-color: #000;
+            aspect-ratio: 16/9;
+            max-height: 50vh;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        .channels-section {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+        }
+        .channels-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 12px;
+        }
+        .channel-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            padding: 18px 10px;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .channel-card:active, .channel-card:hover {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+        }
+        /* تحسينات الشاشات الكبيرة مثل الكمبيوتر والأيباد */
+        @media (min-width: 768px) {
+            .main-layout {
+                flex-direction: row;
+            }
+            .player-container {
+                flex: 2;
+                max-height: 100%;
+                aspect-ratio: auto;
+            }
+            .channels-section {
+                flex: 1;
+                border-right: 1px solid var(--card-border);
+            }
+            .channels-list {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+        }
+    </style>
 </head>
 <body>
 
-<header>📺 مشغل تلفزيون أبو أحمد المباشر</header>
+    <header>📺 تلفزيون أبو أحمد المباشر</header>
 
-<div class="main-container">
-    <div class="player-box">
-        <video id="videoPlayer" controls autoplay playsinline></video>
+    <div class="main-layout">
+        <!-- مشغل الفيديو المتوافق -->
+        <div class="player-container">
+            <video id="video" controls autoplay playsinline></video>
+        </div>
+
+        <!-- قسم القنوات المخصصة للتحرير -->
+        <div class="channels-section">
+            <div class="channels-list">
+                
+                <!-- 👇 هنا تضيف قنواتك يا أبو أحمد 👇 -->
+                <!-- كل ما عليك هو تكرار السطر بالأسفل وتعديل الرابط واسم القناة -->
+                <div class="channel-card" onclick="playStream('https://mux.dev')">قناة تجريبية 1</div>
+                <div class="channel-card" onclick="playStream('https://cloudfront.net')">قناة تجريبية 2</div>
+                
+                <!-- مثال لقناة جديدة تضيفها مستقبلاً: -->
+                <!-- <div class="channel-card" onclick="playStream('ضع_الرابط_هنا.m3u8')">اسم القناة الجديدة</div> -->
+                <!-- 👆 نهاية قسم القنوات 👆 -->
+
+            </div>
+        </div>
     </div>
-    
-    <div class="channels-section">
-        <!-- 👇 أضف قنواتك هنا يا أبو أحمد بتكرار السطور بالأسفل واستبدال الروابط والأسماء 👇 -->
-        <div class="channel-item" onclick="startPlay('https://mux.dev')">قناة تجريبية 1</div>
-        <div class="channel-item" onclick="startPlay('https://cloudfront.net')">قناة تجريبية 2</div>
-        
-        <!-- يمكنك إضافة سطر جديد هنا لقناتك الخاصة بهذا الشكل: -->
-        <!-- <div class="channel-item" onclick="startPlay('ضع رابط القناة هنا.m3u8')">اسم القناة الخاصة بك</div> -->
-    </div>
-</div>
 
-<script>
-// تفعيل الـ PWA ليعمل التطبيق في الخلفية على الآيفون
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js'); });
-}
+    <script>
+        // تفعيل الـ Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').catch(err => console.log(err));
+            });
+        }
 
-let activeHls = null;
-function startPlay(url) {
-    const video = document.getElementById('videoPlayer');
-    if (activeHls) { activeHls.destroy(); }
+        // مشغل البث والتعامل مع الآيفون والكمبيوتر
+        let hls = null;
+        function playStream(url) {
+            const video = document.getElementById('video');
+            
+            if (hls) {
+                hls.destroy();
+            }
 
-    if (Hls.isSupported()) {
-        activeHls = new Hls();
-        activeHls.loadSource(url);
-        activeHls.attachMedia(video);
-        activeHls.on(Hls.Events.MANIFEST_PARSED, function() { video.play(); });
-    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-        // التشغيل المباشر لمتصفح سفاري على الآيفون والماك
-        video.src = url;
-        video.addEventListener('loadedmetadata', function() { video.play(); });
-    }
-}
+            if (Hls.isSupported()) {
+                hls = new Hls();
+                hls.loadSource(url);
+                hls.attachMedia(video);
+                hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                    video.play();
+                });
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                // دعم تشغيل نظام iOS المباشر في سفاري
+                video.src = url;
+                video.addEventListener('loadedmetadata', function() {
+                    video.play();
+                });
+            } else {
+                alert('المتصفح لا يدعم تشغيل هذا النوع من الروابط.');
+            }
+        }
 
-// تشغيل القناة الأولى تلقائياً عند فتح الموقع
-window.addEventListener('DOMContentLoaded', () => {
-    const firstChan = document.querySelector('.channel-item');
-    if (firstChan) { firstChan.click(); }
-});
-</script>
+        // تشغيل أول قناة تلقائياً عند فتح التطبيق
+        window.addEventListener('DOMContentLoaded', () => {
+            const firstChannel = document.querySelector('.channel-card');
+            if (firstChannel) {
+                firstChannel.click();
+            }
+        });
+    </script>
 </body>
 </html>
