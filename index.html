@@ -12,6 +12,7 @@
     <link rel="apple-touch-icon" href="https://flaticon.com">
     
     <link rel="manifest" href="manifest.json">
+    <!-- إصلاح استدعاء مكتبة مشغل الفيديو للآيفون والكمبيوتر -->
     <script src="https://jsdelivr.net"></script>
 
     <style>
@@ -87,23 +88,11 @@
             border-color: var(--accent-color);
             transform: translateY(-2px);
         }
-        /* تحسينات الشاشات الكبيرة مثل الكمبيوتر والأيباد */
         @media (min-width: 768px) {
-            .main-layout {
-                flex-direction: row;
-            }
-            .player-container {
-                flex: 2;
-                max-height: 100%;
-                aspect-ratio: auto;
-            }
-            .channels-section {
-                flex: 1;
-                border-right: 1px solid var(--card-border);
-            }
-            .channels-list {
-                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-            }
+            .main-layout { flex-direction: row; }
+            .player-container { flex: 2; max-height: 100%; aspect-ratio: auto; }
+            .channels-section { flex: 1; border-right: 1px solid var(--card-border); }
+            .channels-list { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
         }
     </style>
 </head>
@@ -112,37 +101,31 @@
     <header>📺 تلفزيون أبو أحمد المباشر</header>
 
     <div class="main-layout">
-        <!-- مشغل الفيديو المتوافق -->
         <div class="player-container">
             <video id="video" controls autoplay playsinline></video>
         </div>
 
-        <!-- قسم القنوات المخصصة للتحرير -->
         <div class="channels-section">
             <div class="channels-list">
                 
-                <!-- 👇 هنا تضيف قنواتك يا أبو أحمد 👇 -->
-                <!-- كل ما عليك هو تكرار السطر بالأسفل وتعديل الرابط واسم القناة -->
+                <!-- 👇 استبدل الروابط التجريبية بالأسفل بروابط الـ IPTV الفعلية الخاصة بك 👇 -->
                 <div class="channel-card" onclick="playStream('https://mux.dev')">قناة تجريبية 1</div>
                 <div class="channel-card" onclick="playStream('https://cloudfront.net')">قناة تجريبية 2</div>
                 
-                <!-- مثال لقناة جديدة تضيفها مستقبلاً: -->
-                <!-- <div class="channel-card" onclick="playStream('ضع_الرابط_هنا.m3u8')">اسم القناة الجديدة</div> -->
-                <!-- 👆 نهاية قسم القنوات 👆 -->
+                <!-- لإضافة قناتك الخاصة، امسح علامة التهميش وضَع الرابط الفعلي بالأسفل: -->
+                <!-- <div class="channel-card" onclick="playStream('ضع_رابط_البث_هنا.m3u8')">اسم قناتك الخاصة</div> -->
 
             </div>
         </div>
     </div>
 
     <script>
-        // تفعيل الـ Service Worker
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('sw.js').catch(err => console.log(err));
             });
         }
 
-        // مشغل البث والتعامل مع الآيفون والكمبيوتر
         let hls = null;
         function playStream(url) {
             const video = document.getElementById('video');
@@ -159,7 +142,6 @@
                     video.play();
                 });
             } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                // دعم تشغيل نظام iOS المباشر في سفاري
                 video.src = url;
                 video.addEventListener('loadedmetadata', function() {
                     video.play();
@@ -169,7 +151,6 @@
             }
         }
 
-        // تشغيل أول قناة تلقائياً عند فتح التطبيق
         window.addEventListener('DOMContentLoaded', () => {
             const firstChannel = document.querySelector('.channel-card');
             if (firstChannel) {
