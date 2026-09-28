@@ -8,8 +8,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.13/dist/hls.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/mpegts.js@1.7.3/dist/mpegts.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/dashjs@4.7.4/dist/dash.all.min.js"></script>
 <style>
 :root {
     --ink: #0a1320;
@@ -25,246 +23,220 @@
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; width: 100%; max-width: 100%; overflow-x: hidden; }
-body { background: var(--ink); color: var(--text); font-family: 'Cairo', Tahoma, Arial, sans-serif; overflow: hidden; }
+body { background: var(--ink); color: var(--text); font-family: 'Cairo', Tahoma, Arial, sans-serif; overflow-y: auto; }
 button, input { font: inherit; color: inherit; }
 button { cursor: pointer; background: none; border: 0; }
 .fx { outline: none; transition: transform .15s, box-shadow .15s; }
-.fx:focus-visible, .fx.kf:focus { box-shadow: 0 0 0 3px var(--gold), 0 0 20px rgba(240,185,74,.35); transform: scale(1.03); z-index: 2; }
+.fx:hover { transform: scale(1.02); }
 .hide { display: none !important; }
-.btn { background: var(--raise); border: 1px solid var(--line); border-radius: 12px; padding: 12px 18px; font-weight: 700; font-size: 15px; display: inline-flex; align-items: center; gap: 8px; }
+.btn { background: var(--raise); border: 1px solid var(--line); border-radius: 12px; padding: 10px 16px; font-weight: 700; font-size: 14px; display: inline-flex; align-items: center; gap: 8px; color: var(--text); }
 .btn.pri { background: var(--gold); color: #1a1204; border-color: var(--gold); }
-.btn.cy { border-color: rgba(63,211,230,.5); color: var(--cyan); }
-.row { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
-.empty { padding: 50px 20px; text-align: center; color: var(--mute); line-height: 1.9; grid-column: 1/-1; }
-#boot, #app { position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 9990; background: var(--ink); }
-#boot { display: grid; place-items: center; padding: 24px; background: radial-gradient(800px 500px at 85% -10%,rgba(63,211,230,.12),transparent 60%),radial-gradient(600px 500px at 0% 110%,rgba(240,185,74,.1),transparent 60%),var(--ink); }
-.box { width: min(560px,100%); }
-.brand { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; }
+#boot { position: fixed; inset: 0; z-index: 9990; background: var(--ink); display: grid; place-items: center; padding: 24px; }
+.box { width: min(560px,100%); text-align: center; }
+.brand { display: flex; align-items: center; justify-content: center; gap: 14px; margin-bottom: 22px; }
 .brand .mk { width: 54px; height: 54px; border-radius: 16px; background: linear-gradient(140deg,var(--gold),#c98a1c); display: grid; place-items: center; color: #1a1204; font-weight: 900; font-size: 26px; }
-.brand h1 { font-size: 30px; font-weight: 900; }
-.brand p { color: var(--mute); font-size: 14px; }
-.msg { padding: 12px 14px; border-radius: 12px; font-size: 14px; line-height: 1.8; margin-bottom: 12px; background: rgba(63,211,230,.08); border: 1px solid rgba(63,211,230,.35); color: #bff4fa; }
-.msg.err { background: rgba(255,107,107,.1); border-color: rgba(255,107,107,.4); color: #ffc2c2; }
-#app { display: grid; grid-template-rows: auto auto auto minmax(0,1fr); grid-template-columns: minmax(0,1fr); width: 100%; }
-#app > * { min-width: 0; }
-header { display: flex; align-items: center; gap: 10px; padding: 8px 12px; padding-top: calc(8px + env(safe-area-inset-top,0px)); border-bottom: 1px solid var(--line); background: var(--panel); }
+.brand h1 { font-size: 28px; font-weight: 900; }
+.msg { padding: 12px 14px; border-radius: 12px; font-size: 14px; background: rgba(63,211,230,.08); border: 1px solid rgba(63,211,230,.35); color: #bff4fa; }
+header { display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-bottom: 1px solid var(--line); background: var(--panel); position: sticky; top: 0; z-index: 100; }
 header .mk { width: 38px; height: 38px; border-radius: 11px; background: var(--gold); color: #1a1204; font-weight: 900; display: grid; place-items: center; flex: none; }
-header h2 { font-size: 16px; font-weight: 900; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; flex: 0 1 auto; }
-#rname { color: var(--cyan); font-size: 12px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; flex: 0 1 auto; }
+header h2 { font-size: 16px; font-weight: 900; }
+#rname { color: var(--cyan); font-size: 12px; font-weight: 700; }
 .sp { flex: 1; }
-.ib { width: 40px; height: 40px; border-radius: 12px; background: var(--raise); border: 1px solid var(--line); display: grid; place-items: center; flex: none; font-size: 16px; font-weight: 900; }
-.ib svg { width: 20px; height: 20px; }
-#wrap { overflow-y: auto; padding: 14px 16px 40px; min-height: 0; }
-.sec { display: flex; align-items: center; gap: 10px; margin: 18px 4px 10px; font-weight: 900; font-size: 15px; }
-.sec:after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg,transparent,var(--line)); }
-.tiles { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; }
-@media (min-width:760px){ .tiles { grid-template-columns: repeat(3,1fr); } }
-.tile { position: relative; overflow: hidden; border-radius: 22px; padding: 16px; min-height: 128px; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start; text-align: right; color: #fff; background: linear-gradient(150deg,var(--a),var(--b)); box-shadow: 0 12px 28px -14px var(--a); border: 1px solid rgba(255,255,255,.08); }
-.tile b { font-size: 19px; font-weight: 900; position: relative; z-index: 1; margin-top: 10px; }
-.tile small { font-size: 12px; font-weight: 700; opacity: .9; position: relative; z-index: 1; }
-.errc { border-radius: 18px; padding: 14px; background: rgba(255,107,107,.08); border: 1px solid rgba(255,107,107,.35); color: #ffc2c2; text-align: center; line-height: 1.9; margin-top: 6px; }
-.toast { position: fixed; bottom: calc(22px + env(safe-area-inset-bottom,0px)); left: 50%; transform: translateX(-50%) translateY(20px); background: var(--raise); border: 1px solid var(--line); padding: 10px 18px; border-radius: 12px; font-size: 14px; opacity: 0; transition: .25s; z-index: 99999; pointer-events: none; max-width: 90vw; text-align: center; }
-.toast.on { opacity: 1; transform: translateX(-50%); }
+.ib { width: 40px; height: 40px; border-radius: 12px; background: var(--raise); border: 1px solid var(--line); display: grid; place-items: center; flex: none; }
+.ib svg { width: 20px; height: 20px; stroke: currentColor; }
+#wrap { padding: 16px; max-width: 1200px; margin: 0 auto; }
+.sec { display: flex; align-items: center; gap: 10px; margin: 16px 0; font-weight: 900; font-size: 16px; }
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+.tile { position: relative; overflow: hidden; border-radius: 20px; padding: 20px; min-height: 120px; display: flex; flex-direction: column; justify-content: space-between; text-align: right; color: #fff; background: linear-gradient(150deg,var(--a),var(--b)); border: 1px solid rgba(255,255,255,.1); cursor: pointer; user-select: none; }
+.tile b { font-size: 20px; font-weight: 900; }
+.tile small { font-size: 13px; opacity: .85; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; margin-top: 14px; }
+.gcard { background: var(--panel); border: 1px solid var(--line); border-radius: var(--r); padding: 14px; text-align: right; cursor: pointer; display: flex; flex-direction: column; gap: 6px; }
+.gcard:hover { border-color: var(--gold); }
+.gcard b { font-size: 14px; font-weight: 800; line-height: 1.4; color: var(--text); }
+.gcard small { color: var(--cyan); font-size: 12px; }
+#player-container { margin-bottom: 20px; background: #000; border-radius: 16px; overflow: hidden; display: none; }
+video { width: 100%; aspect-ratio: 16/9; display: block; }
 </style>
 </head>
 <body>
+
 <section id="boot">
   <div class="box">
-    <div class="brand">
-        <div class="mk">أ</div>
-        <div>
-            <h1>تلفزيون أبو أحمد</h1>
-            <p>القنوات المباشرة على الجوال والتلفزيون</p>
-        </div>
-    </div>
-    <div id="msg" class="msg">جاري التحميل…</div>
-    <button id="retry" class="btn pri fx hide">إعادة المحاولة</button>
+    <div class="brand"><div class="mk">أ</div><div><h1>تلفزيون أبو أحمد</h1></div></div>
+    <div id="msg" class="msg">جاري تحميل البيانات…</div>
   </div>
 </section>
 
 <section id="app" class="hide">
   <header>
     <div class="mk">أ</div>
-    <h2>تلفزيون أبو أحمد</h2>
-    <small id="rname"></small>
+    <div>
+        <h2>تلفزيون أبو أحمد</h2>
+        <small id="rname"></small>
+    </div>
     <span class="sp"></span>
-    <button class="ib fx" id="reloadBtn" aria-label="تحديث">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg>
-    </button>
+    <button class="btn hide" id="backBtn">↩ الرجوع</button>
+    <button class="ib fx" id="reloadBtn" title="تحديث"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg></button>
   </header>
+
   <div id="wrap">
-    <div id="grid"></div>
+    <div id="player-container">
+        <video id="vid" controls autoplay></video>
+    </div>
+    <div id="main-content"></div>
   </div>
 </section>
 
-<div class="toast" id="toast"></div>
-
 <script>
-window.onerror = function(msg, url, line) {
-    var el = document.getElementById("msg");
-    if (el) {
-        el.className = "msg err";
-        el.textContent = "JS error: " + msg + " (line " + line + ")";
-    }
-};
+window.ABU_CFG = { PANEL: 'https://abuahmad-receiver.abu7hmaad.workers.dev' };
 
-window.ABU_CFG = {
-    PANEL: 'https://abuahmad-receiver.abu7hmaad.workers.dev'
-};
-</script>
-
-<script>
 (function() {
     "use strict";
 
-    const $ = function(s) { return document.querySelector(s); };
+    const $ = s => document.querySelector(s);
+    let state = { rcv: [], curRx: null, mode: 'home', categories: [], streams: [] };
+    let hlsPlayer = null;
 
-    const storage = {
-        get: function(k, d) {
-            try {
-                const v = localStorage.getItem("abuahmad_iptv_" + k);
-                return v == null ? d : JSON.parse(v);
-            } catch (e) { return d; }
-        },
-        set: function(k, v) {
-            try {
-                localStorage.setItem("abuahmad_iptv_" + k, JSON.stringify(v));
-                return true;
-            } catch (e) { return false; }
-        }
-    };
-
-    const escapeHtml = function(s) {
-        return String(s == null ? "" : s).replace(/[&<>"']/g, function(c) {
-            return "&#" + c.charCodeAt(0) + ";";
-        });
-    };
-
-    const isUrl = function(s) {
-        return /^https?:\/\/[^\s]+$/i.test(String(s || "").trim());
-    };
-
-    const panelUrl = String((window.ABU_CFG || {}).PANEL || "").trim().replace(/\/+$/, "");
-
-    let state = {
-        rcv: [],
-        ri: 0,
-        rx: null,
-        rErr: ""
-    };
-
-    async function fetchProxy(url, timeoutMs) {
-        if (panelUrl && (location.protocol === 'https:' || url.startsWith('http:')) && !url.startsWith(panelUrl)) {
-            url = panelUrl + "/m3u?url=" + encodeURIComponent(url);
-        }
-        return fetchRaw(url, timeoutMs);
-    }
-
-    async function fetchRaw(url, timeoutMs) {
-        const controller = window.AbortController ? new AbortController() : null;
-        const timer = controller ? setTimeout(function() { controller.abort(); }, timeoutMs || 30000) : null;
+    async function init() {
         try {
-            const resp = await fetch(url, { cache: "no-store", signal: controller ? controller.signal : null });
-            if (!resp.ok) throw new Error("HTTP " + resp.status);
-            return await resp.text();
-        } catch (e) {
-            throw new Error(e.name === "AbortError" ? "انتهت مهلة الاتصال" : e.message);
-        } finally {
-            if (timer) clearTimeout(timer);
-        }
-    }
-
-    function parseConfig(cfg) {
-        const rcvList = [];
-        ((cfg || {}).xtream || []).forEach(function(x) {
-            if (x && isUrl(x.server) && x.username && x.password) {
-                rcvList.push({
-                    k: "xt",
-                    name: x.name || "رسيفر Xtream",
-                    server: String(x.server).trim().replace(/\/+$/, ""),
-                    username: String(x.username).trim(),
-                    password: String(x.password).trim()
-                });
+            const res = await fetch(window.ABU_CFG.PANEL);
+            const data = await res.json();
+            state.rcv = data.xtream || [];
+            if (state.rcv.length) {
+                state.curRx = state.rcv[0];
+                $("#rname").textContent = "📡 " + state.curRx.name;
+                renderHome();
+                $("#boot").classList.add("hide");
+                $("#app").classList.remove("hide");
+            } else {
+                $("#msg").textContent = "⚠️ لا توجد بيانات رسيفرات صحيحة.";
             }
-        });
-
-        ((cfg || {}).m3u || []).concat(cfg.files || []).forEach(function(m) {
-            if (!m || !isUrl(m.url)) return;
-            rcvList.push({ k: "m3u", name: m.name || "قائمة M3U", url: String(m.url).trim() });
-        });
-
-        state.rcv = rcvList;
+        } catch (e) {
+            $("#msg").textContent = "تعذّر جلب البيانات: " + e.message;
+        }
     }
 
-    function renderApp() {
-        $("#boot").classList.add("hide");
-        $("#app").classList.remove("hide");
-
-        if (!state.rcv.length) {
-            $("#rname").textContent = "";
-            $("#grid").innerHTML = `
-                <div class="empty">
-                    ⚠️ لم يتم العثور على أي رسيفرات في الوركر الجديد.<br>
-                    يرجى التأكد من إضافة بيانات اشتراكك داخل وركر abuahmad-receiver.
-                </div>
-            `;
-            return;
-        }
-
-        const rx = state.rcv[state.ri];
-        $("#rname").textContent = "📡 " + rx.name;
-
-        let html = `
-            <div class="sec">📺 المحتوى المتاح في ${escapeHtml(rx.name)}</div>
+    function renderHome() {
+        state.mode = 'home';
+        $("#backBtn").classList.add("hide");
+        $("#main-content").innerHTML = `
+            <div class="sec">📺 المحتوى المتاح في ${state.curRx.name}</div>
             <div class="tiles">
-                <div class="tile" style="--a:#103b68; --b:#0c2544;">
+                <div class="tile fx" data-type="live" style="--a:#103b68; --b:#0c2544;">
                     <b>📡 القنوات المباشرة</b>
-                    <small>جميع الباقات والقنوات</small>
+                    <small>عرض الأقسام والباقات</small>
                 </div>
-                <div class="tile" style="--a:#68103b; --b:#440c25;">
+                <div class="tile fx" data-type="movie" style="--a:#68103b; --b:#440c25;">
                     <b>🎬 مكتبة الأفلام</b>
                     <small>أحدث الأفلام المترجمة</small>
                 </div>
-                <div class="tile" style="--a:#106841; --b:#0c442b;">
+                <div class="tile fx" data-type="series" style="--a:#106841; --b:#0c442b;">
                     <b>🎞️ المسلسلات</b>
                     <small>المواسم والحلقات</small>
                 </div>
             </div>
         `;
 
-        $("#grid").innerHTML = html;
+        document.querySelectorAll('.tile').forEach(el => {
+            el.onclick = () => loadCategories(el.dataset.type);
+        });
     }
 
-    async function init() {
-        $("#msg").className = "msg";
-        $("#msg").textContent = "جاري جلب الإعدادات…";
+    async function loadCategories(type) {
+        $("#main-content").innerHTML = `<div class="sec">جاري تحميل الأقسام...</div>`;
+        const action = type === 'live' ? 'get_live_categories' : type === 'movie' ? 'get_vod_categories' : 'get_series_categories';
+        const url = `${state.curRx.server}/player_api.php?username=${state.curRx.username}&password=${state.curRx.password}&action=${action}`;
 
         try {
-            if (!panelUrl) throw new Error("رابط اللوحة غير مضبوط");
-            const configText = await fetchProxy(panelUrl, 15000);
-            const cfg = JSON.parse(configText);
-            storage.set("panel", cfg);
-            parseConfig(cfg);
+            const res = await fetch(url);
+            const cats = await res.json();
+            state.categories = cats;
+            renderCategories(type);
         } catch (e) {
-            const cached = storage.get("panel", null);
-            if (cached) {
-                parseConfig(cached);
-            } else {
-                $("#msg").className = "msg err";
-                $("#msg").textContent = "تعذّر الاتصال بالوركر: " + e.message;
-                $("#retry").classList.remove("hide");
-                return;
-            }
+            $("#main-content").innerHTML = `<div class="sec">تعذّر جلب الأقسام</div>`;
         }
-
-        renderApp();
     }
 
-    document.addEventListener("DOMContentLoaded", function() {
-        $("#retry").onclick = init;
-        $("#reloadBtn").onclick = init;
-        init();
-    });
+    function renderCategories(type) {
+        state.mode = 'cats';
+        $("#backBtn").classList.remove("hide");
+        let html = `<div class="sec">📂 الأقسام المتاحة</div><div class="grid">`;
+        state.categories.forEach(c => {
+            html += `<div class="gcard fx" data-id="${c.category_id}" data-type="${type}">
+                <b>${c.category_name}</b>
+                <small>اضغط لفتح القنوات</small>
+            </div>`;
+        });
+        html += `</div>`;
+        $("#main-content").innerHTML = html;
+
+        document.querySelectorAll('.gcard').forEach(el => {
+            el.onclick = () => loadStreams(el.dataset.type, el.dataset.id);
+        });
+    }
+
+    async function loadStreams(type, catId) {
+        $("#main-content").innerHTML = `<div class="sec">جاري جلب القائمة...</div>`;
+        const action = type === 'live' ? 'get_live_streams' : type === 'movie' ? 'get_vod_streams' : 'get_series_streams';
+        const url = `${state.curRx.server}/player_api.php?username=${state.curRx.username}&password=${state.curRx.password}&action=${action}&category_id=${catId}`;
+
+        try {
+            const res = await fetch(url);
+            const streams = await res.json();
+            renderStreams(streams, type);
+        } catch (e) {
+            $("#main-content").innerHTML = `<div class="sec">تعذّر تحميل القنوات</div>`;
+        }
+    }
+
+    function renderStreams(streams, type) {
+        state.mode = 'streams';
+        let html = `<div class="sec">📺 القنوات والمحتوى</div><div class="grid">`;
+        streams.forEach(s => {
+            const streamId = s.stream_id || s.series_id;
+            const ext = type === 'live' ? 'm3u8' : 'mp4';
+            const playUrl = `${state.curRx.server}/${type}/${state.curRx.username}/${state.curRx.password}/${streamId}.${ext}`;
+            html += `<div class="gcard fx play-btn" data-url="${playUrl}">
+                <b>${s.name}</b>
+                <small>▶ تشغيل الآن</small>
+            </div>`;
+        });
+        html += `</div>`;
+        $("#main-content").innerHTML = html;
+
+        document.querySelectorAll('.play-btn').forEach(el => {
+            el.onclick = () => playStream(el.dataset.url);
+        });
+    }
+
+    function playStream(url) {
+        const container = $("#player-container");
+        const video = $("#vid");
+        container.style.display = 'block';
+
+        if (Hls.isSupported() && url.includes('m3u8')) {
+            if (hlsPlayer) hlsPlayer.destroy();
+            hlsPlayer = new Hls();
+            hlsPlayer.loadSource(url);
+            hlsPlayer.attachMedia(video);
+        } else {
+            video.src = url;
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    $("#backBtn").onclick = () => {
+        $("#player-container").style.display = 'none';
+        if (state.mode === 'streams') {
+            renderCategories('live');
+        } else {
+            renderHome();
+        }
+    };
+
+    $("#reloadBtn").onclick = init;
+    document.addEventListener("DOMContentLoaded", init);
 })();
 </script>
 </body>
