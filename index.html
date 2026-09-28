@@ -82,7 +82,7 @@ video { width: 100%; aspect-ratio: 16/9; display: block; }
 
   <div id="wrap">
     <div id="player-container">
-        <video id="vid" controls autoplay></video>
+        <video id="vid" controls autoplay playsinline></video>
     </div>
     <div id="main-content"></div>
   </div>
@@ -117,7 +117,6 @@ window.ABU_CFG = { PANEL: 'https://abuahmad-receiver.abu7hmaad.workers.dev' };
             state.rcv = data.xtream || [];
             if (state.rcv.length) {
                 state.curRx = state.rcv[0];
-                // تنظيف رابط السيرفر من / الأخيرة
                 state.curRx.server = String(state.curRx.server || "").replace(/\/+$/, "");
                 $("#rname").textContent = "📡 " + state.curRx.name;
                 renderHome();
@@ -210,9 +209,10 @@ window.ABU_CFG = { PANEL: 'https://abuahmad-receiver.abu7hmaad.workers.dev' };
         let html = `<div class="sec">📺 المحتوى المتاح (${streams.length})</div><div class="grid">`;
         streams.forEach(s => {
             const streamId = s.stream_id || s.series_id;
+            // استخدام TS أو M3U8 للبث المباشر
             const ext = type === 'live' ? 'm3u8' : 'mp4';
-            const playUrl = `${state.curRx.server}/${type}/${state.curRx.username}/${state.curRx.password}/${streamId}.${ext}`;
-            html += `<div class="gcard fx play-btn" data-url="${playUrl}">
+            const playUrl = `${state.curRx.server}/${type === 'live' ? 'live' : type}/${state.curRx.username}/${state.curRx.password}/${streamId}.${ext}`;
+            html += `<div class="gcard fx play-btn" data-url="${playUrl}" data-type="${type}">
                 <b>${s.name}</b>
                 <small>▶ تشغيل الآن</small>
             </div>`;
@@ -221,27 +221,38 @@ window.ABU_CFG = { PANEL: 'https://abuahmad-receiver.abu7hmaad.workers.dev' };
         $("#main-content").innerHTML = html;
 
         document.querySelectorAll('.play-btn').forEach(el => {
-            el.onclick = () => playStream(el.dataset.url);
+            el.onclick = () => playStream(el.dataset.url, el.dataset.type);
         });
     }
 
-    function playStream(url) {
+    function playStream(url, type) {
         const container = $("#player-container");
         const video = $("#vid");
         container.style.display = 'block';
 
-        if (Hls.isSupported() && url.includes('m3u8')) {
+        // توجيه رابط البث عبر الوركر لفتح القنوات غير المشفرة وتفادي حظر المتصفح
+        const proxiedUrl = window.ABU_CFG.PANEL + "/?url=" + encodeURIComponent(url);
+
+        if (Hls.isSupported() && (url.includes('m3u8') || type === 'live')) {
             if (hlsPlayer) hlsPlayer.destroy();
-            hlsPlayer = new Hls();
-            hlsPlayer.loadSource(url);
+            hlsPlayer = new Hls({
+                enableWorker: true,
+                lowLatencyMode: true
+            });
+            hlsPlayer.loadSource(proxiedUrl);
             hlsPlayer.attachMedia(video);
+            hlsPlayer.on(Hls.Events.MANIFEST_PARSED, function() {
+                video.play().catch(() => {});
+            });
         } else {
-            video.src = url;
+            video.src = proxiedUrl;
+            video.play().catch(() => {});
         }
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     $("#backBtn").onclick = () => {
+        if (hlsPlayer) hlsPlayer.destroy();
         $("#player-container").style.display = 'none';
         if (state.mode === 'streams') {
             renderCategories(state.activeType);
